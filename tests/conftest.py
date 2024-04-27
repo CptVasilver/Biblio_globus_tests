@@ -10,6 +10,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from dotenv import load_dotenv
 from allure_commons.types import AttachmentType
+
 DEFAULT_BROWSER_VERSION = "122.0"
 BASE_URL = "https://www.biblio-globus.ru"
 
@@ -34,10 +35,20 @@ def browser_management():
     browser.config.base_url = BASE_URL
     browser.config.window_height = 1080
     browser.config.window_width = 1920
+    browser.config.timeout = 20.0
 
     yield
 
     browser.quit()
+
+
+@pytest.fixture(scope='function',
+                params=[('delivery_0', 'Self-borrow'), ('delivery_1', 'Boxberry'), ('delivery_2', 'Courier'),
+                        ('delivery_3', 'Russia post')])
+def delivery_check(request):
+    delivery_type, delivery_name = request.param
+    return delivery_name, delivery_type
+
 
 
 @pytest.fixture(scope='function', autouse=False)
@@ -75,6 +86,7 @@ def browser_managements(request):
     attach.add_html(browser)
     attach.add_screenshot(browser)
     browser.quit()
+
 
 def get_cookie():
     user_login = os.getenv("USER_LOGIN")
