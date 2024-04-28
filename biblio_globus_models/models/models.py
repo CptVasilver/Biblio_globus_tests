@@ -110,18 +110,20 @@ class Profile:
             attach.add_screenshot(browser)
 
     def download_contract_template(self):
-        self.open('information/corporate-customer-service')
-        browser.element('#headingOne').click()
-        url = (
-            'https://www.biblio-globus.ru/doc/%D0%94%D0%BE%D0%B3%D0%BE%D0%B2%D0%BE%D1%80%20(%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0).docx')
-        file_name = file_path('document.docx')
-        urlretrieve(url, file_name)
-        output = pypandoc.convert_file(file_name, 'plain', outputfile="../biblio_globus_models/files/Doc.txt")
-        a = path.isfile(file_path('Doc.txt'))
+        with step('Download contract'):
+            self.open('information/corporate-customer-service')
+            browser.element('#headingOne').click()
+            url = (
+                'https://www.biblio-globus.ru/doc/%D0%94%D0%BE%D0%B3%D0%BE%D0%B2%D0%BE%D1%80%20(%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0).docx')
+            file_name = file_path('document.docx')
+            urlretrieve(url, file_name)
+            output = pypandoc.convert_file(file_name, 'plain', outputfile="../biblio_globus_models/files/Doc.txt")
+            a = path.isfile(file_path('Doc.txt'))
         with open(file_path('Doc.txt'), 'r', encoding='utf-8') as f:
-            assert f.readline(9) == 'ДОГОВОР №'
-            doc_attach = f.read()
-            allure.attach(body=doc_attach, name="Document", attachment_type=AttachmentType.TEXT, extension="txt")
+            with step('Checking for correctness'):
+                assert f.readline(9) == 'ДОГОВОР №'
+                doc_attach = f.read()
+                allure.attach(body=doc_attach, name="Document", attachment_type=AttachmentType.TEXT, extension="txt")
             f.close()
         open(file_path('Doc.txt'), 'w').close()
         open(file_path('document.docx'), 'w').close()

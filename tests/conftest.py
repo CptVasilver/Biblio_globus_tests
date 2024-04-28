@@ -98,7 +98,7 @@ def get_cookie():
             allow_redirects=False
         )
         cookie = response.cookies.get(".ASPXAUTH")
+        assert response.status_code == 302
         allure.attach(body=response.text, name="Response", attachment_type=AttachmentType.TEXT, extension="txt")
         allure.attach(body=cookie, name="Cookie", attachment_type=AttachmentType.TEXT, extension="txt")
-
     return cookie
