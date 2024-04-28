@@ -7,4 +7,3 @@ def test_login_via_post():
     page.open('')
     page.login()
 
-def test
