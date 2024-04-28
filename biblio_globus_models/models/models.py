@@ -120,6 +120,7 @@ class Profile:
         a = path.isfile(file_path('Doc.txt'))
         doc = open(file_path('Doc.txt'), 'a+')
         doc_attach = doc.read()
+        doc.close()
         allure.attach(body=doc_attach, name="Document", attachment_type=AttachmentType.TEXT, extension="txt")
         open(file_path('Doc.txt'), 'w').close()
         open(file_path('document.docx'), 'w').close()
