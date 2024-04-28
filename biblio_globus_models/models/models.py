@@ -1,12 +1,11 @@
-import os
-from asyncio import sleep
-
+from os import path
+from urllib.request import urlretrieve
+import pypandoc
 import allure
-import requests
 from allure import step
 from allure_commons.types import AttachmentType
 from selene import browser, have, command
-
+from biblio_globus_models.resources import file_path
 from tests.conftest import get_cookie
 from utils import attach
 
@@ -111,8 +110,16 @@ class Profile:
             attach.add_screenshot(browser)
 
     def download_contract_template(self):
-        self.open('information/corporate-customer-service')
-        browser.element('#headingOne').click()
-        browser.element(
-            '[href="https://www.biblio-globus.ru/doc/%D0%94%D0%BE%D0%B3%D0%BE%D0%B2%D0%BE%D1%80%20(%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0).docx"]').click()
-        pass
+    #    self.open('information/corporate-customer-service')
+    #    browser.element('#headingOne').click()
+        url = (
+            'https://www.biblio-globus.ru/doc/%D0%94%D0%BE%D0%B3%D0%BE%D0%B2%D0%BE%D1%80%20(%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0).docx')
+        file_name = '../biblio_globus_models/files/document.docx'
+        urlretrieve(url, file_name)
+        output = pypandoc.convert_file(file_name, 'plain', outputfile="../biblio_globus_models/files/Doc.txt")
+        a = path.isfile(file_path('Doc.txt'))
+        doc = open(file_path('Doc.txt'), 'a+')
+        doc_attach = doc.read()
+        allure.attach(body=doc_attach, name="Document", attachment_type=AttachmentType.TEXT, extension="txt")
+        open(file_path('Doc.txt'), 'w').close()
+        open(file_path('document.docx'), 'w').close()

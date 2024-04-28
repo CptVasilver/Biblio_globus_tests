@@ -5,7 +5,6 @@ import os
 from utils import attach
 from selene import browser
 from allure import step
-from pathlib import Path
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from dotenv import load_dotenv
@@ -14,8 +13,7 @@ from allure_commons.types import AttachmentType
 DEFAULT_BROWSER_VERSION = "122.0"
 BASE_URL = "https://www.biblio-globus.ru"
 
-def path(file_name):
-    return str(Path(__file__).parent.joinpath(f'resources/{file_name}'))
+
 
 
 def pytest_addoption(parser):
