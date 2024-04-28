@@ -114,7 +114,7 @@ class Profile:
         browser.element('#headingOne').click()
         url = (
             'https://www.biblio-globus.ru/doc/%D0%94%D0%BE%D0%B3%D0%BE%D0%B2%D0%BE%D1%80%20(%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0).docx')
-        file_name = '../biblio_globus_models/files/document.docx'
+        file_name = file_path('document.docx')
         urlretrieve(url, file_name)
         output = pypandoc.convert_file(file_name, 'plain', outputfile="../biblio_globus_models/files/Doc.txt")
         a = path.isfile(file_path('Doc.txt'))
