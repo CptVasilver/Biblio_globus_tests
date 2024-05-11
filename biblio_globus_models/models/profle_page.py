@@ -66,7 +66,6 @@ class ProfilePage:
             browser.element('#Customer_Phone_Basic').should(have.value(data['Phone number']))
             browser.element('#Customer_Email').should(have.value(data['Email']))
             allure.attach(body=str(data), name="Test data", attachment_type=AttachmentType.TEXT, extension="txt")
-            attach.add_screenshot(browser)
 
     def login(self):
         cookie = get_cookie()
@@ -104,7 +103,6 @@ class ProfilePage:
     def assert_announcement(self):
         with step('Assert it is right announcement'):
             browser.element('#event-title').should(have.text('Презентация книги «Черный хлеб дорог»'))
-            attach.add_screenshot(browser)
 
     def download_contract_template(self):
         with step('Download contract'):
