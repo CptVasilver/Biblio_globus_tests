@@ -1,3 +1,4 @@
+import os
 from os import path
 from urllib.request import urlretrieve
 import pypandoc
@@ -5,10 +6,11 @@ import allure
 from allure import step
 from allure_commons.types import AttachmentType
 from selene import browser, have, command
-from biblio_globus_tests.resources import file_path
+from biblio_globus_models.resources import file_path
 from tests.conftest import get_cookie
-from biblio_globus_tests.utils import attach
+from biblio_globus_models.utils import attach
 from urllib.parse import quote
+
 
 def find_delivery_text(delivery_name):
     if delivery_name == 'Self-borrow':
@@ -21,7 +23,7 @@ def find_delivery_text(delivery_name):
         return 'Доставка «Почта России»'
 
 
-class Profile:
+class ProfilePage:
 
     def open(self, page):
         browser.open('/' + page)
@@ -40,15 +42,19 @@ class Profile:
         with step('Add bag to cart'):
             browser.element('[data-target="#recommendedProducts"]').click()
             browser.element('#add_9961627').click()
-            browser.element('.shopping-cart-title-counter').should(have.text('2'))
 
-    def full_buy(self, delivery_type, delivery_name):
+    def confirm_bag_in_cart(self):
+        browser.element('.shopping-cart-title-counter').should(have.text('2'))
+
+    def choose_delivery_type(self, delivery_type):
         browser.element('#usualCheckout').with_(click_by_js=True).click()
         with step(f'Choose a delivery type {delivery_type}'):
             browser.element(f'#{delivery_type}').click()
             browser.element('#usualCheckout').click()
-            delivery_text = find_delivery_text(delivery_name)
-            browser.element('.box').should(have.text(delivery_text))
+
+    def confirm_delivery_type(self, delivery_type, delivery_name):
+        delivery_text = find_delivery_text(delivery_name)
+        browser.element('.box').should(have.text(delivery_text))
 
     def confirm_user_data(self, data):
         self.open('customer/profile')
@@ -68,23 +74,12 @@ class Profile:
         browser.open('/')
 
     def change_user_data(self, data):
-        self.confirm_user_data(data)
-        with step('Change user info to <Куаева Тестериня>'):
-            browser.element('#Customer_SecondName').type('а')
-            browser.element('#Customer_FirstName').type('иня')
-            browser.element('.bootstrap-frm').element('[type="submit"]').click()
-            browser.element('.bootstrap-frm>p').should(have.text('Изменения успешно сохранены'))
-            browser.open('/customer/profile')
-            browser.element('#Customer_SecondName').should(have.value(data['Surname'] + 'а'))
-            browser.element('#Customer_FirstName').should(have.value(data['Name'] + 'иня'))
-            attach.add_screenshot(browser)
-        with step('Change user info back to <Куаев Тестер>'):
+        self.open('customer/profile')
+        with step('Change user data'):
             browser.element('#Customer_SecondName').clear().type(data['Surname'])
             browser.element('#Customer_FirstName').clear().type(data['Name'])
             browser.element('.bootstrap-frm').element('[type="submit"]').click()
-            browser.open('/customer/profile')
-        with step('Confirm user data'):
-            self.confirm_user_data(data)
+            browser.element('.bootstrap-frm>p').should(have.text('Изменения успешно сохранены'))
 
     def confirm_categories(self):
         browser.all('.card-header>h5').should(
@@ -105,6 +100,9 @@ class Profile:
             browser.element('.d-block').with_(click_by_js=True).click()
         with step('Go to «Черный хлеб дорог» announcement'):
             browser.switch_to_next_tab()
+
+    def assert_announcement(self):
+        with step('Assert it is right announcement'):
             browser.element('#event-title').should(have.text('Презентация книги «Черный хлеб дорог»'))
             attach.add_screenshot(browser)
 
@@ -115,13 +113,18 @@ class Profile:
             url = quote('https://www.biblio-globus.ru/doc/Договор (Москва).docx', safe=':/')
             file_name = file_path('document.docx')
             urlretrieve(url, file_name)
-            output = pypandoc.convert_file(file_name, 'plain', outputfile="../biblio_globus_tests/files/Doc.txt")
+            output = pypandoc.convert_file(file_name, 'plain', outputfile="biblio_globus_models/files/Doc.txt")
             a = path.isfile(file_path('Doc.txt'))
+
+    def file_reconciliation(self):
         with open(file_path('Doc.txt'), 'r', encoding='utf-8') as f:
-            with step('Checking for correctness'):
+            with step('Checking file for correctness'):
                 assert f.readline(9) == 'ДОГОВОР №'
                 doc_attach = f.read()
                 allure.attach(body=doc_attach, name="Document", attachment_type=AttachmentType.TEXT, extension="txt")
             f.close()
         open(file_path('Doc.txt'), 'w').close()
         open(file_path('document.docx'), 'w').close()
+
+
+profile = ProfilePage()

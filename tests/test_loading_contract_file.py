@@ -1,10 +1,10 @@
 import allure
-from biblio_globus_tests.models.profle_page import Profile
+from biblio_globus_models.models.profle_page import profile
 
 
 @allure.story('Check contract file')
 def test_contract_file():
-    page = Profile()
-    page.open('')
-    page.login()
-    page.download_contract_template()
+    profile.open('')
+    profile.login()
+    profile.download_contract_template()
+    profile.file_reconciliation()

@@ -1,22 +1,22 @@
 import allure
-from biblio_globus_tests.models.profle_page import Profile
+from biblio_globus_models.models.profle_page import profile
 
 
 @allure.story('Buy a random book with different delivery ways')
 def test_buy_with_different_delivery_ways(delivery_check):
     delivery_name, delivery_type = delivery_check
 
-    page = Profile()
-    page.open('')
-    page.login()
-    page.add_book()
-    page.full_buy(delivery_type, delivery_name)
+    profile.open('')
+    profile.login()
+    profile.add_book()
+    profile.choose_delivery_type(delivery_type)
+    profile.confirm_delivery_type(delivery_type, delivery_name)
 
 
 @allure.story('Buy a random book with a bag')
 def test_buy_book_with_bag():
-    page = Profile()
-    page.open('')
-    page.login()
-    page.add_book()
-    page.add_bag()
+    profile.open('')
+    profile.login()
+    profile.add_book()
+    profile.add_bag()
+    profile.confirm_bag_in_cart()
