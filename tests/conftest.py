@@ -2,7 +2,7 @@ import allure
 import requests
 import pytest
 import os
-from utils import attach
+from biblio_globus_tests.utils import attach
 from selene import browser
 from allure import step
 from selenium import webdriver

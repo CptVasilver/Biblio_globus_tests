@@ -5,10 +5,10 @@ import allure
 from allure import step
 from allure_commons.types import AttachmentType
 from selene import browser, have, command
-from biblio_globus_models.resources import file_path
+from biblio_globus_tests.resources import file_path
 from tests.conftest import get_cookie
-from utils import attach
-
+from biblio_globus_tests.utils import attach
+from urllib.parse import quote
 
 def find_delivery_text(delivery_name):
     if delivery_name == 'Self-borrow':
@@ -56,7 +56,7 @@ class Profile:
             browser.element('#Customer_SecondName').should(have.value(data['Surname']))
             browser.element('#Customer_FirstName').should(have.value(data['Name']))
             browser.element('#BirthDate').should(have.value(data['DoB']))
-            browser.element(f'#sex_{data['Sex']}').should(have.value('1'))
+            browser.element(f'#sex_{data["Sex"]}').should(have.value('1'))
             browser.element('#Customer_Phone_Basic').should(have.value(data['Phone number']))
             browser.element('#Customer_Email').should(have.value(data['Email']))
             allure.attach(body=str(data), name="Test data", attachment_type=AttachmentType.TEXT, extension="txt")
@@ -87,7 +87,6 @@ class Profile:
             self.confirm_user_data(data)
 
     def confirm_categories(self):
-        self.open('customer/profile')
         browser.all('.card-header>h5').should(
             have.exact_texts('Художественная литература', 'Психология', 'Бизнес. Продвижение. Экономика',
                              'Информационные технологии', 'Философия. Эзотерика. Религия',
@@ -113,11 +112,10 @@ class Profile:
         with step('Download contract'):
             self.open('information/corporate-customer-service')
             browser.element('#headingOne').click()
-            url = (
-                'https://www.biblio-globus.ru/doc/%D0%94%D0%BE%D0%B3%D0%BE%D0%B2%D0%BE%D1%80%20(%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0).docx')
+            url = quote('https://www.biblio-globus.ru/doc/Договор (Москва).docx', safe=':/')
             file_name = file_path('document.docx')
             urlretrieve(url, file_name)
-            output = pypandoc.convert_file(file_name, 'plain', outputfile="../biblio_globus_models/files/Doc.txt")
+            output = pypandoc.convert_file(file_name, 'plain', outputfile="../biblio_globus_tests/files/Doc.txt")
             a = path.isfile(file_path('Doc.txt'))
         with open(file_path('Doc.txt'), 'r', encoding='utf-8') as f:
             with step('Checking for correctness'):

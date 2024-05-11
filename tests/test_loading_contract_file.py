@@ -1,5 +1,5 @@
 import allure
-from biblio_globus_models.models.models import Profile
+from biblio_globus_tests.models.profle_page import Profile
 
 
 @allure.story('Check contract file')

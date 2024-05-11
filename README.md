@@ -1,6 +1,6 @@
 # Тестирование сайта <a target="_blank" href="https://www.awwwards.com/">Awwwards.com</a>
 
-![main page screenshot](pics/main_page.png)
+![main page screenshot](resources/pics/main_page.png)
 
 ---
 ### Проверки, реализованные в автотестах
@@ -23,7 +23,7 @@
 #### Для запуска автотестов в Jenkins
 1. Открыть [задачу в Jenkins](https://jenkins.autotests.cloud/job/qa_guru_student_awwwards_test/)
 
-![jenkins job main page](pics/jenkins_view.png)
+![jenkins job main page](resources/pics/jenkins_view.png)
 
 2. Нажать "**Build Now**".
 
@@ -31,16 +31,16 @@
 
 ### Allure отчет
 
-![allure_report main page](pics/allure_report.png)
+![allure_report main page](resources/pics/allure_report.png)
 
 ---
 
 ### Уведомления в Телеграм
 
-![telegram_notification](pics/telegram_bot.png)
+![telegram_notification](resources/pics/telegram_bot.png)
 
 ---
 
 ### Прохождение автотеста
 
-![autotest](pics/video.gif)
+![autotest](resources/pics/video.gif)
