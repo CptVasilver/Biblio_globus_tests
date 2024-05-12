@@ -3,11 +3,12 @@ from os import path
 from urllib.request import urlretrieve
 import pypandoc
 import allure
+import requests
 from allure import step
 from allure_commons.types import AttachmentType
-from selene import browser, have, command
+from selene import browser, have, command, be
 from biblio_globus_models.resources import file_path
-from tests.conftest import get_cookie
+from tests.conftest import get_cookie, BASE_URL
 from biblio_globus_models.utils import attach
 from urllib.parse import quote
 
@@ -68,9 +69,14 @@ class ProfilePage:
             allure.attach(body=str(data), name="Test data", attachment_type=AttachmentType.TEXT, extension="txt")
 
     def login(self):
-        cookie = get_cookie()
+        cookie, user_name_cookie = get_cookie()
         browser.driver.add_cookie({"name": ".ASPXAUTH", "value": cookie})
         browser.open('/')
+        return cookie, user_name_cookie
+
+    def confirm_login(self):
+        with step('Confirm success login0'):
+            browser.element('#icon_cab3').should(be.visible)
 
     def change_user_data(self, data):
         self.open('customer/profile')
@@ -123,6 +129,24 @@ class ProfilePage:
             f.close()
         open(file_path('Doc.txt'), 'w').close()
         open(file_path('document.docx'), 'w').close()
+
+    def add_book_with_API(self, id, cookie, user_name_cookie):
+        url = BASE_URL + "/Basket/AddToBasket/"
+        cookies = {'.ASPXAUTH': f'{cookie}', 'UserName': f'{user_name_cookie}'}
+
+        headers = {
+            'Cookie': f'.ASPXAUTH ={cookie}; UserName={user_name_cookie}'
+        }
+        allure.attach(body=user_name_cookie, name="Cookie", attachment_type=AttachmentType.TEXT, extension="txt")
+        with step("Add book"):
+            response = requests.request(
+                "POST",
+                url=url,
+                headers=headers,
+                data={"productId": id}
+            )
+            allure.attach(body=response.text, name="Response", attachment_type=AttachmentType.TEXT, extension="txt")
+        browser.open('')
 
 
 profile = ProfilePage()
