@@ -142,8 +142,8 @@ class ProfilePage:
             response = requests.request(
                 "POST",
                 url=url,
-                headers=headers,
-                data={"productId": id}
+                data={"productId": id},
+                headers=headers
             )
             allure.attach(body=response.text, name="Response", attachment_type=AttachmentType.TEXT, extension="txt")
         browser.open('')
