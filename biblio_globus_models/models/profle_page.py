@@ -145,8 +145,10 @@ class ProfilePage:
                 data={"productId": id},
                 headers=headers
             )
+            for cookie_name, cookie_value in response.cookies.items():
+                browser.driver.add_cookie({"name": cookie_name, "value": cookie_value})
             allure.attach(body=response.text, name="Response", attachment_type=AttachmentType.TEXT, extension="txt")
-        browser.open('')
+        browser.open('/basket/detail')
 
 
 profile = ProfilePage()
