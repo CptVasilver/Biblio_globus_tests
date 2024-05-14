@@ -173,9 +173,7 @@ class ProfilePage:
 
     def confirm_book_quantity(self, book_id, quantity):
         with step(f'Reconcile quantity of books with requested quantity'):
-            # browser.element(f'#quantity_{book_id}').should(have.value(quantity))
-            # browser.element(f'#quantity_{book_id}').should(have.value(int(quantity)))
-            browser.element(f'#quantity_{book_id}').should(have.attribute('value', quantity))
+            browser.element(f'#basket_quantity1').should(have.text(str(quantity)))
 
     def get_regions(self, cookie, user_name_cookie, basket_id, country_id):
         url = BASE_URL + "/Customer/GetRegions/"
