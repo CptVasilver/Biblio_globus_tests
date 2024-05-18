@@ -1,5 +1,5 @@
 import allure
-from biblio_globus_models.pages.profle_page import profile
+from biblio_globus_models.pages.profile_page import profile
 
 
 @allure.story('Buy a random book with different delivery ways')

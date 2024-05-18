@@ -1,5 +1,5 @@
 import allure
-from biblio_globus_models.pages.profle_page import profile
+from biblio_globus_models.pages.profile_page import profile
 
 test_user_data = {'Surname': 'Куаев', 'Name': 'Тестер', 'DoB': '01.01.2000', 'Sex': 'm',
                   'Phone number': '88005553535', 'Email': 'vasilver.work@yandex.ru'}

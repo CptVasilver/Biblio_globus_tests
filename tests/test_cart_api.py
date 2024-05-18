@@ -1,6 +1,6 @@
 import allure
-from biblio_globus_models.pages.profle_page import profile, api_profile
-
+from biblio_globus_models.pages.profile_page import profile
+from biblio_globus_models.pages.api_page import api_profile
 book_id = 10988536
 book_name = 'Рассказы из русской истории. Петр I. Империя. Т.2. Книга четвертая.'
 quantity = int(10)
