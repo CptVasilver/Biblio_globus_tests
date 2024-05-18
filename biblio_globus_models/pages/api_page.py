@@ -110,7 +110,7 @@ class ApiPage:
 
     def check_shema(self, response, request_name):
         with open(schema_path(f'{request_name}.json')) as file:
-            validate(response.json(), schema=json.loads(file.read()))
+            validate(response, schema=json.loads(file.read()))
 
 
 api_profile = ApiPage()
