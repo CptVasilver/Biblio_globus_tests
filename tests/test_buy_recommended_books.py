@@ -1,5 +1,5 @@
 import allure
-from biblio_globus_models.models.profle_page import profile
+from biblio_globus_models.pages.profle_page import profile
 
 
 @allure.story('Buy a random book with different delivery ways')
@@ -10,7 +10,7 @@ def test_buy_with_different_delivery_ways(delivery_check):
     profile.login()
     profile.add_book()
     profile.choose_delivery_type(delivery_type)
-    profile.confirm_delivery_type(delivery_type, delivery_name)
+    profile.confirm_delivery_type(delivery_name)
 
 
 @allure.story('Buy a random book with a bag')

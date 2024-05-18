@@ -7,11 +7,12 @@ import requests
 from allure import step
 from allure_commons.types import AttachmentType
 from selene import browser, have, command, be
-from biblio_globus_models.resources import file_path
+from biblio_globus_models.resources import file_path, schema_path
 from tests.conftest import get_cookie, BASE_URL
 from biblio_globus_models.utils import attach
 from urllib.parse import quote
-
+from jsonschema import validate
+import json
 
 def find_delivery_text(delivery_name):
     if delivery_name == 'Self-borrow':
@@ -53,7 +54,7 @@ class ProfilePage:
             browser.element(f'#{delivery_type}').click()
             browser.element('#usualCheckout').click()
 
-    def confirm_delivery_type(self, delivery_type, delivery_name):
+    def confirm_delivery_type(self, delivery_name):
         delivery_text = find_delivery_text(delivery_name)
         browser.element('.box').should(have.text(delivery_text))
 
@@ -118,7 +119,6 @@ class ProfilePage:
             file_name = file_path('document.docx')
             urlretrieve(url, file_name)
             output = pypandoc.convert_file(file_name, 'plain', outputfile="biblio_globus_models/files/Doc.txt")
-            a = path.isfile(file_path('Doc.txt'))
 
     def file_reconciliation(self):
         with open(file_path('Doc.txt'), 'r', encoding='utf-8') as f:
@@ -130,7 +130,11 @@ class ProfilePage:
         open(file_path('Doc.txt'), 'w').close()
         open(file_path('document.docx'), 'w').close()
 
-    def add_book_with_API(self, book_id, cookie, user_name_cookie):
+
+profile = ProfilePage()
+
+class ApiPage:
+    def add_book_with_api(self, book_id, cookie, user_name_cookie):
         url = BASE_URL + "/Basket/AddToBasket/"
 
         headers = {
@@ -150,11 +154,9 @@ class ProfilePage:
                 browser.driver.add_cookie({"name": cookie_name, "value": cookie_value})
         browser.open('/basket/detail')
         basket_id = response.cookies.get("BasketId")
-        return basket_id
+        return basket_id, response
 
-    def confirm_book_in_cart(self, book_name):
-        with step(f'Searchig for {book_name} in cart'):
-            browser.element('.product-name').should(have.text(book_name))
+
 
     def change_quantity(self, cookie, user_name_cookie, basket_id, book_id, book_name, quantity):
         url = BASE_URL + "/Basket/ChangeQuantity/"
@@ -170,10 +172,9 @@ class ProfilePage:
                 headers=headers
             )
         browser.open('/basket/detail')
+        return response
 
-    def confirm_book_quantity(self, book_id, quantity):
-        with step(f'Reconcile quantity of books with requested quantity'):
-            browser.element(f'#basket_quantity1').should(have.text(str(quantity)))
+
 
     def get_regions(self, cookie, user_name_cookie, basket_id, country_id):
         url = BASE_URL + "/Customer/GetRegions/"
@@ -190,12 +191,9 @@ class ProfilePage:
             )
             allure.attach(body=response.text, name="Regions", attachment_type=AttachmentType.TEXT,
                           extension="txt")
-        return response.text
+        return response
 
-    def check_regions(self, regions):
-        with step('Reconcile received regions with list'):
-            for region in range(152, 238):
-                assert str(region) in regions
+
 
     def get_cities(self, cookie, user_name_cookie, basket_id, country_id, region_id):
         url = BASE_URL + "/Customer/GetCities/"
@@ -212,12 +210,33 @@ class ProfilePage:
             )
             allure.attach(body=response.text, name="Cities", attachment_type=AttachmentType.TEXT,
                           extension="txt")
-        return response.text
+        return response
+
+    def confirm_book_in_cart(self, book_name):
+        with step(f'Searchig for {book_name} in cart'):
+            browser.element('.product-name').should(have.text(book_name))
+
+    def confirm_book_quantity(self, book_id, quantity):
+        with step(f'Reconcile quantity of books with requested quantity'):
+            browser.element(f'#quantity_{book_id}').should(have.attribute("value", str(quantity)))
+
+    def check_regions(self, regions):
+        with step('Reconcile received regions with list'):
+            for region in range(152, 238):
+                assert str(region) in regions
 
     def check_cities(self, cities, cities_list):
         with step('Reconcile received cities with list'):
             for city in cities_list:
                 assert city in cities
 
+    def check_status_code(self, status_code):
+        assert status_code == 200
 
-profile = ProfilePage()
+    def check_shema(self, response, request_name):
+        with open(schema_path(f'{request_name}.json')) as file:
+            validate(response.json(), schema=json.loads(file.read()))
+
+
+api_profile = ApiPage()
+

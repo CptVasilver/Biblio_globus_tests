@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "Cities": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "Id": {
+              "type": "integer"
+            },
+            "Name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "Id",
+            "Name"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Id": {
+              "type": "integer"
+            },
+            "Name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "Id",
+            "Name"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Id": {
+              "type": "integer"
+            },
+            "Name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "Id",
+            "Name"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Id": {
+              "type": "integer"
+            },
+            "Name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "Id",
+            "Name"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "Cities"
+  ]
+}
