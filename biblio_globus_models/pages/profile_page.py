@@ -37,7 +37,7 @@ class ProfilePage:
     def add_bag(self):
         with step('Add bag to cart'):
             browser.element('[data-target="#recommendedProducts"]').click()
-            browser.element('#add_9961627').click()
+            browser.element('#add_9961627').perform(command.js.click)
 
     def confirm_bag_in_cart(self):
         browser.element('.shopping-cart-title-counter').should(have.text('2'))
