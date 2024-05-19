@@ -15,13 +15,14 @@ class ApiPage:
         response = get_cookie()
         cookie = response.cookies.get(".ASPXAUTH")
         user_name_cookie = response.cookies.get("UserName")
+        response_logging(response)
         if response_needed:
             return response
         else:
             return cookie, user_name_cookie
 
     def add_book_with_api(self, book_id, cookie, user_name_cookie):
-        with allure.step('API request'):
+        with allure.step('API request AddToBasket'):
             url = BASE_URL + "/Basket/AddToBasket/"
 
             headers = {
@@ -39,7 +40,7 @@ class ApiPage:
         return basket_id, response
 
     def change_quantity(self, cookie, user_name_cookie, book_id, quantity):
-        with allure.step('API request'):
+        with allure.step('API request ChangeQuantity'):
             url = BASE_URL + "/Basket/ChangeQuantity/"
 
             headers = {
@@ -56,7 +57,7 @@ class ApiPage:
         return response
 
     def get_regions(self, cookie, user_name_cookie, basket_id, country_id):
-        with allure.step('API request'):
+        with allure.step('API request GetRegions'):
             url = BASE_URL + "/Customer/GetRegions/"
 
             headers = {
@@ -73,7 +74,7 @@ class ApiPage:
         return response
 
     def get_cities(self, cookie, user_name_cookie, basket_id, country_id, region_id):
-        with allure.step('API request'):
+        with allure.step('API request GetCities'):
             url = BASE_URL + "/Customer/GetCities/"
 
             headers = {
