@@ -14,8 +14,6 @@ DEFAULT_BROWSER_VERSION = "122.0"
 BASE_URL = "https://www.biblio-globus.ru"
 
 
-
-
 def pytest_addoption(parser):
     parser.addoption(
         '--browser_version',
@@ -28,25 +26,12 @@ def load_env():
     load_dotenv()
 
 
-@pytest.fixture(autouse=False)
-def browser_management():
-    browser.config.base_url = BASE_URL
-    browser.config.window_height = 1080
-    browser.config.window_width = 1920
-    browser.config.timeout = 20.0
-
-    yield
-
-    browser.quit()
-
-
 @pytest.fixture(scope='function',
                 params=[('delivery_0', 'Self-borrow'), ('delivery_1', 'Boxberry'), ('delivery_2', 'Courier'),
                         ('delivery_3', 'Russia post')])
 def delivery_check(request):
     delivery_type, delivery_name = request.param
     return delivery_name, delivery_type
-
 
 
 @pytest.fixture(scope='function', autouse=False)
@@ -98,5 +83,6 @@ def get_cookie():
             allow_redirects=False
         )
         allure.attach(body=response.text, name="Response", attachment_type=AttachmentType.TEXT, extension="txt")
-        allure.attach(body=response.cookies.get(".ASPXAUTH"), name="Cookie", attachment_type=AttachmentType.TEXT, extension="txt")
+        allure.attach(body=response.cookies.get(".ASPXAUTH"), name="Cookie", attachment_type=AttachmentType.TEXT,
+                      extension="txt")
     return response

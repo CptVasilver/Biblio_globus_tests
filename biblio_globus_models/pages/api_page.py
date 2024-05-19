@@ -105,10 +105,17 @@ class ApiPage:
         else:
             assert status_code == 200
 
-    def check_shema(self, response, request_name):
+    def check_sсhema(self, response, request_name):
         with open(schema_path(f'{request_name}.json')) as file:
             validate(response, schema=json.loads(file.read()))
 
+    def check_resp(self, response, request):
+        if request == 'change_quantity':
+            assert response == 'true'
+        elif request == 'add_to_basket':
+            assert response == '{"NumberOfItems":1,"BasketTotal":"692,00","UserName":null}'
+        elif request == 'login':
+            assert request.find('Object moved')
 
 api_profile = ApiPage()
 
@@ -122,3 +129,5 @@ def response_logging(response):
     logging.info("Response: " + response.text)
     allure.attach(body=json.dumps(response.json(), indent=4, ensure_ascii=True), name="Response",
                   attachment_type=AttachmentType.JSON, extension="json")
+    allure.attach(body=response.request, name="Request",
+                  attachment_type=AttachmentType.TEXT, extension="txt")
