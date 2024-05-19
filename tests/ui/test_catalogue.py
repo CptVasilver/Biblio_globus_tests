@@ -3,7 +3,7 @@ from biblio_globus_models.pages.profile_page import profile
 
 
 @allure.story('Checking categories in catalogue')
-def test_catalogue(browser_management):
+def test_catalogue(browser_managements):
     profile.open('')
     profile.login()
     profile.open('catalog/categories')
