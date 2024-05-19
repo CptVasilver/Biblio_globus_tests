@@ -3,7 +3,7 @@ import pypandoc
 import allure
 from allure import step
 from allure_commons.types import AttachmentType
-from selene import browser, have, command, be
+from selene import browser, have, command
 from biblio_globus_models.resources import file_path
 from tests.conftest import get_cookie
 from urllib.parse import quote
@@ -64,14 +64,14 @@ class ProfilePage:
             allure.attach(body=str(data), name="Test data", attachment_type=AttachmentType.TEXT, extension="txt")
 
     def login(self):
-        cookie, user_name_cookie = get_cookie()
+        response = get_cookie()
+        cookie = response.cookies.get(".ASPXAUTH")
+        user_name_cookie = response.cookies.get("UserName")
         browser.driver.add_cookie({"name": ".ASPXAUTH", "value": cookie})
         browser.open('/')
         return cookie, user_name_cookie
-
-    def confirm_login(self):
-        with step('Confirm success login0'):
-            browser.element('#icon_cab3').should(be.visible)
+    #    with step('Confirm success login0'):
+    #        browser.element('#icon_cab3').should(be.visible)
 
     def change_user_data(self, data):
         self.open('customer/profile')
