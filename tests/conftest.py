@@ -28,7 +28,7 @@ def load_env():
     load_dotenv()
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(autouse=False)
 def browser_management():
     browser.config.base_url = BASE_URL
     browser.config.window_height = 1080

@@ -7,14 +7,14 @@ test_new_user_data = {'Surname': 'Куаева', 'Name': 'Тестериня', '
                   'Phone number': '88005553535', 'Email': 'vasilver.work@yandex.ru'}
 
 @allure.story('Confirm current user info')
-def test_confirm_test_data():
+def test_confirm_test_data(browser_management):
     profile.open('')
     profile.login()
     profile.confirm_user_data(test_user_data)
 
 
 @allure.story('Change current user info')
-def test_change_user_data():
+def test_change_user_data(browser_management):
     profile.open('')
     profile.login()
     profile.change_user_data(test_new_user_data)
