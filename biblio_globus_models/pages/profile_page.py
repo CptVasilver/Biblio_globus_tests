@@ -109,7 +109,7 @@ class ProfilePage:
             url = quote('https://www.biblio-globus.ru/doc/Договор (Москва).docx', safe=':/')
             file_name = file_path('document.docx')
             urlretrieve(url, file_name)
-            output = pypandoc.convert_file(file_name, 'plain', outputfile="biblio_globus_models/files/Doc.txt")
+            pypandoc.convert_file(file_name, 'plain', outputfile="biblio_globus_models/files/Doc.txt")
 
     def file_reconciliation(self):
         with open(file_path('Doc.txt'), 'r', encoding='utf-8') as f:
