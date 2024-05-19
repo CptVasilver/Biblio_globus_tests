@@ -117,6 +117,7 @@ class ApiPage:
         elif request == 'login':
             assert request.find('Object moved')
 
+
 api_profile = ApiPage()
 
 
@@ -129,5 +130,5 @@ def response_logging(response):
     logging.info("Response: " + response.text)
     allure.attach(body=json.dumps(response.json(), indent=4, ensure_ascii=True), name="Response",
                   attachment_type=AttachmentType.JSON, extension="json")
-    allure.attach(body=response.request, name="Request",
-                  attachment_type=AttachmentType.TEXT, extension="txt")
+    allure.attach(body=json.dumps(response.request.body, indent=4, ensure_ascii=True), name="Request body",
+                  attachment_type=AttachmentType.JSON, extension="json")
