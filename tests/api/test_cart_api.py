@@ -1,9 +1,12 @@
 import allure
 from biblio_globus_models.pages.api_page import api_profile
+
 book_id = 10988536
 book_name = 'Рассказы из русской истории. Петр I. Империя. Т.2. Книга четвертая.'
 quantity = int(10)
 
+
+@allure.parent_suite('API')
 @allure.story('Add book into cart with API')
 def test_add_book_into_cart_api():
     cookie, user_name_cookie = api_profile.login()
@@ -12,6 +15,7 @@ def test_add_book_into_cart_api():
     api_profile.check_shema(resp.json(), 'add_to_basket')
 
 
+@allure.parent_suite('API')
 @allure.story('Change quantity of books in cart with API')
 def test_change_quantity_of_books_in_cart():
     cookie, user_name_cookie = api_profile.login()

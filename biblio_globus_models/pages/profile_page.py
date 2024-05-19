@@ -8,6 +8,7 @@ from biblio_globus_models.resources import file_path
 from tests.conftest import get_cookie
 from urllib.parse import quote
 
+
 def find_delivery_text(delivery_name):
     if delivery_name == 'Self-borrow':
         return 'Подтверждение заказа'
@@ -23,8 +24,6 @@ class ProfilePage:
 
     def open(self, page):
         browser.open('/' + page)
-
-    #  browser.all('.link-underlined').element_by(have.text('Reject all')).click()
 
     def scroll(self, tag):
         browser.element(f'.{tag}').perform(command.js.scroll_into_view)
@@ -70,8 +69,6 @@ class ProfilePage:
         browser.driver.add_cookie({"name": ".ASPXAUTH", "value": cookie})
         browser.open('/')
         return cookie, user_name_cookie
-    #    with step('Confirm success login0'):
-    #        browser.element('#icon_cab3').should(be.visible)
 
     def change_user_data(self, data):
         self.open('customer/profile')
@@ -126,4 +123,3 @@ class ProfilePage:
 
 
 profile = ProfilePage()
-

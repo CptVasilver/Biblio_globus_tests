@@ -112,6 +112,7 @@ class ApiPage:
 
 api_profile = ApiPage()
 
+
 def response_logging(response):
     logging.info("Request: " + response.request.url)
     if response.request.body:

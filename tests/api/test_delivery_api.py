@@ -7,6 +7,7 @@ region_id = 236
 cities_list = ["Анадырь", "Билибино", "Певек"]
 
 
+@allure.parent_suite('API')
 @allure.story('Check delivery regions with API')
 def test_check_delivery_regions_api():
     cookie, user_name_cookie = api_profile.login()
@@ -17,6 +18,7 @@ def test_check_delivery_regions_api():
     api_profile.check_shema(regions.json(), 'get_regions')
 
 
+@allure.parent_suite('API')
 @allure.story(f'Check delivery cities in {region_id} region with API')
 def test_check_delivery_cities_api():
     cookie, user_name_cookie = api_profile.login()

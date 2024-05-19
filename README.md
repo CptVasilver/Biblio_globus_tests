@@ -1,27 +1,28 @@
-# Тестирование сайта <a target="_blank" href="https://www.awwwards.com/">Awwwards.com</a>
+# Тестирование сайта <a target="_blank" href="https://www.biblio-globus.ru/">Biblio-globus.ru</a>
 
 ![main page screenshot](resources/pics/main_page.png)
 
 ---
 ### Проверки, реализованные в автотестах
 1. Вход существующего пользователя.
-2. Отображение страны пользователя в его профиле.
-3. Сверка доступных категорий курсов.
-4. Поиск курса.
-5. Ссылка на аккаунт Pinterest.
+2. Добавление различной продукции в корзину.
+3. Проверка доступных способов доставки.
+4. Переход на страницу анонсированного события.
+5. Скачивание и сверка файла договора.
+6. Правильность работы основных API запросов сайта.
 
 ---
 
 ### Используемые инструменты
-<img title="Python" src="pics/icons/python.svg" height="40" width="40"/> <img title="Pytest" src="pics/icons/pytest.svg" height="40" width="40"/> <img title="Allure Report" src="pics/icons/allure_report.png" height="40" width="40"/> <img title="GitHub" src="pics/icons/github.svg" height="40" width="40"/> <img title="Selenoid" src="pics/icons/selenoid.png" height="40" width="40"/> <img title="Selene" src="pics/icons/selene.png" height="40" width="40"/> <img title="Pycharm" src="pics/icons/pycharm-original.svg" height="40" width="40"/> <img title="Telegram" src="pics/icons/telegram.png" height="40" width="40"/> <img title="Jenkins" src="pics/icons/jenkins-original.svg" height="40" width="40"/>
+<img title="Python" src="resources/pics/icons/python.svg" height="40" width="40"/> <img title="Pytest" src="resources/pics/icons/pytest.svg" height="40" width="40"/> <img title="Allure Report" src="resources/pics/icons/allure_report.png" height="40" width="40"/> <img title="GitHub" src="resources/pics/icons/github.svg" height="40" width="40"/> <img title="Selenoid" src="resources/pics/icons/selenoid.png" height="40" width="40"/> <img title="Selene" src="resources/pics/icons/selene.png" height="40" width="40"/> <img title="Pycharm" src="resources/pics/icons/pycharm-original.svg" height="40" width="40"/> <img title="Telegram" src="resources/pics/icons/telegram.png" height="40" width="40"/> <img title="Jenkins" src="resources/pics/icons/jenkins-original.svg" height="40" width="40"/> <img title="Jira" src="resources/pics/icons/jira.svg" height="40" width="40"/>
 
 ---
 
 ### Запуск автотестов осуществляется с помощью Jenkins
-> [Ссылка на сборку в Jenkins](https://jenkins.autotests.cloud/job/qa_guru_student_awwwards_test/)
+> [Ссылка на сборку в Jenkins](https://jenkins.autotests.cloud/job/qa_guru_student_biblio_globus/)
 
 #### Для запуска автотестов в Jenkins
-1. Открыть [задачу в Jenkins](https://jenkins.autotests.cloud/job/qa_guru_student_awwwards_test/)
+1. Открыть [задачу в Jenkins](https://jenkins.autotests.cloud/job/qa_guru_student_biblio_globus/)
 
 ![jenkins job main page](resources/pics/jenkins_view.png)
 
