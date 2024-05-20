@@ -1,14 +1,14 @@
-import allure
-import requests
+
 import pytest
 import os
+
+from biblio_globus_models.utils.api_helper import api_request
 from biblio_globus_models.utils import attach
 from selene import browser
 from allure import step
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from dotenv import load_dotenv
-from allure_commons.types import AttachmentType
 
 DEFAULT_BROWSER_VERSION = "122.0"
 BASE_URL = "https://www.biblio-globus.ru"
@@ -74,15 +74,12 @@ def browser_managements(request):
 def get_cookie():
     user_login = os.getenv("USER_LOGIN")
     user_pass = os.getenv("USER_PASSWORD")
-    url = BASE_URL + "/auth/login"
     with step("Login via API"):
-        response = requests.request(
-            "POST",
-            url=url,
+        response = api_request(
+            base_api_url=BASE_URL,
+            endpoint="/auth/login",
+            method="POST",
             data={"UserName": user_login, "Password": user_pass, "RememberMe": False},
             allow_redirects=False
         )
-        allure.attach(body=response.text, name="Response", attachment_type=AttachmentType.TEXT, extension="txt")
-        allure.attach(body=response.cookies.get(".ASPXAUTH"), name="Cookie", attachment_type=AttachmentType.TEXT,
-                      extension="txt")
     return response

@@ -15,7 +15,7 @@ def test_check_delivery_regions_api():
     regions = api_profile.get_regions(cookie, user_name_cookie, basket_id, country_id)
     api_profile.check_regions(regions.text)
     api_profile.check_status_code(regions.status_code)
-    api_profile.check_sсhema(regions.json(), 'get_regions')
+    api_profile.check_schema(regions.json(), 'get_regions')
 
 
 @allure.parent_suite('API')
@@ -26,4 +26,4 @@ def test_check_delivery_cities_api():
     cities = api_profile.get_cities(cookie, user_name_cookie, basket_id, country_id, region_id)
     api_profile.check_cities(cities.text, cities_list)
     api_profile.check_status_code(cities.status_code)
-    api_profile.check_sсhema(cities.json(), 'get_cities')
+    api_profile.check_schema(cities.json(), 'get_cities')

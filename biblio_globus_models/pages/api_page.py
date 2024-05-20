@@ -1,16 +1,25 @@
-import logging
-
 import allure
-import requests
 from allure import step
-from allure_commons.types import AttachmentType
 from biblio_globus_models.resources import schema_path
+from biblio_globus_models.utils.api_helper import api_request
 from tests.conftest import BASE_URL, get_cookie
 from jsonschema import validate
 import json
 
 
 class ApiPage:
+    def cities_and_regions_headers(self, cookie, user_name_cookie, basket_id):
+        headers = {
+            'Cookie': f'.ASPXAUTH ={cookie}; UserName={user_name_cookie}; BasketId={basket_id}'
+        }
+        return headers
+
+    def book_headers(self, cookie, user_name_cookie):
+        headers = {
+            'Cookie': f'.ASPXAUTH ={cookie}; UserName={user_name_cookie}'
+        }
+        return headers
+
     def login(self, response_needed=False):
         response = get_cookie()
         cookie = response.cookies.get(".ASPXAUTH")
@@ -22,71 +31,55 @@ class ApiPage:
 
     def add_book_with_api(self, book_id, cookie, user_name_cookie):
         with allure.step('API request AddToBasket'):
-            url = BASE_URL + "/Basket/AddToBasket/"
-
-            headers = {
-                'Cookie': f'.ASPXAUTH ={cookie}; UserName={user_name_cookie}'
-            }
+            headers = self.book_headers(cookie, user_name_cookie)
             with step("Add book"):
-                response = requests.request(
-                    "POST",
-                    url=url,
+                response = api_request(
+                    base_api_url=BASE_URL,
+                    endpoint="/Basket/AddToBasket/",
+                    method="POST",
                     data={"productId": book_id},
-                    headers=headers
+                    params=headers
                 )
-            response_logging(response)
             basket_id = response.cookies.get("BasketId")
         return basket_id, response
 
     def change_quantity(self, cookie, user_name_cookie, book_id, quantity):
         with allure.step('API request ChangeQuantity'):
-            url = BASE_URL + "/Basket/ChangeQuantity/"
-
-            headers = {
-                'Cookie': f'.ASPXAUTH ={cookie}; UserName={user_name_cookie}'
-            }
+            headers = self.book_headers(cookie, user_name_cookie)
             with step(f'Change quantity of books to {quantity}'):
-                response = requests.request(
-                    "POST",
-                    url=url,
+                response = api_request(
+                    base_api_url=BASE_URL,
+                    endpoint="/Basket/ChangeQuantity/",
+                    method="POST",
                     data={"BiblioNo": book_id, "Quantity": quantity},
-                    headers=headers
+                    params=headers
                 )
-            response_logging(response)
         return response
 
     def get_regions(self, cookie, user_name_cookie, basket_id, country_id):
         with allure.step('API request GetRegions'):
-            url = BASE_URL + "/Customer/GetRegions/"
-
-            headers = {
-                'Cookie': f'.ASPXAUTH ={cookie}; UserName={user_name_cookie}; BasketId={basket_id}'
-            }
+            headers = self.cities_and_regions_headers(cookie, user_name_cookie, basket_id)
             with step(f'Receive regions of {country_id} country with GET request'):
-                response = requests.request(
-                    "GET",
-                    url=url,
+                response = api_request(
+                    base_api_url=BASE_URL,
+                    endpoint="/Customer/GetRegions/",
+                    method="GET",
                     data={"countryId": country_id},
-                    headers=headers
+                    params=headers
                 )
-                response_logging(response)
         return response
 
     def get_cities(self, cookie, user_name_cookie, basket_id, country_id, region_id):
         with allure.step('API request GetCities'):
-            url = BASE_URL + "/Customer/GetCities/"
-
-            headers = {
-                'Cookie': f'.ASPXAUTH ={cookie}; UserName={user_name_cookie}; BasketId={basket_id}'
-            }
+            headers = self.cities_and_regions_headers(cookie, user_name_cookie, basket_id)
             with step(f'Receive cities of {region_id} region of {country_id} country with GET request'):
-                response = requests.request(
-                    "GET",
-                    url=url,
+                response = api_request(
+                    base_api_url=BASE_URL,
+                    endpoint="/Customer/GetCities/",
+                    method="GET",
                     data={"countryId": country_id, "regionId": region_id},
-                    headers=headers
+                    params=headers
                 )
-            response_logging(response)
         return response
 
     def check_regions(self, regions):
@@ -105,7 +98,7 @@ class ApiPage:
         else:
             assert status_code == 200
 
-    def check_sсhema(self, response, request_name):
+    def check_schema(self, response, request_name):
         with open(schema_path(f'{request_name}.json')) as file:
             validate(response, schema=json.loads(file.read()))
 
@@ -119,21 +112,3 @@ class ApiPage:
 
 
 api_profile = ApiPage()
-
-
-def response_logging(response):
-    logging.info("Request: " + response.request.url)
-    if response.request.body:
-        logging.info("INFO Request body: " + response.request.body)
-    logging.info("Request headers: " + str(response.request.headers))
-    logging.info("Response code " + str(response.status_code))
-    logging.info("Response: " + response.text)
-    allure.attach(body=json.dumps(response.json(), indent=4, ensure_ascii=True), name="Response",
-                  attachment_type=AttachmentType.JSON, extension="json")
-    if response.request.body:
-        allure.attach(
-            body=json.dumps(response.request.body, indent=4, ensure_ascii=True),
-            name="Request body",
-            attachment_type=AttachmentType.JSON,
-            extension="json",
-        )
