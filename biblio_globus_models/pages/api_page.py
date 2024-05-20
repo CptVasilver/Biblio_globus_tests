@@ -15,6 +15,7 @@ class ApiPage:
         response = get_cookie()
         cookie = response.cookies.get(".ASPXAUTH")
         user_name_cookie = response.cookies.get("UserName")
+        response_logging(response)
         if response_needed:
             return response
         else:
@@ -130,5 +131,10 @@ def response_logging(response):
     logging.info("Response: " + response.text)
     allure.attach(body=json.dumps(response.json(), indent=4, ensure_ascii=True), name="Response",
                   attachment_type=AttachmentType.JSON, extension="json")
-    allure.attach(body=json.dumps(response.request.body, indent=4, ensure_ascii=True), name="Request body",
-                  attachment_type=AttachmentType.JSON, extension="json")
+    if response.request.body:
+        allure.attach(
+            body=json.dumps(response.request.body, indent=4, ensure_ascii=True),
+            name="Request body",
+            attachment_type=AttachmentType.JSON,
+            extension="json",
+        )

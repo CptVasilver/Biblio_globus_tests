@@ -34,7 +34,7 @@ def delivery_check(request):
     return delivery_name, delivery_type
 
 
-@pytest.fixture(scope='function', autouse=False)
+@pytest.fixture(scope='function')
 def browser_managements(request):
     browser_version = request.config.getoption('--browser_version')
     browser_version = browser_version if browser_version != "" else DEFAULT_BROWSER_VERSION

@@ -36,6 +36,18 @@
 
 ---
 
+### Отчет Allure_TestOps
+
+![allure_report main page](resources/pics/allure_testops.png)
+
+---
+
+### Трекинг задач в Jira
+
+![allure_report main page](resources/pics/jira.png)
+
+---
+
 ### Уведомления в Телеграм
 
 ![telegram_notification](resources/pics/telegram_bot.png)
