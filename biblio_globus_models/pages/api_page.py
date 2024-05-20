@@ -15,7 +15,6 @@ class ApiPage:
         response = get_cookie()
         cookie = response.cookies.get(".ASPXAUTH")
         user_name_cookie = response.cookies.get("UserName")
-        response_logging(response)
         if response_needed:
             return response
         else:
